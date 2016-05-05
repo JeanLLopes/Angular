@@ -5,6 +5,7 @@
     <link href="/Content/bootstrap.min.css" rel="stylesheet" />
 
 
+
     <script src="/Scripts/angular.min.js"></script>
     <script>
         angular.module("ListaPessoas", []);
@@ -15,17 +16,18 @@
 
             //NG-REPEAT = PERMITE NAVEGAR POR LISTA CRIADAS
             $scope.contatos = [
-                { Nome: "Pessoa1", Telefone: "9989899" },
-                { Nome: "Pessoa2", Telefone: "9989899" },
-                { Nome: "Pessoa3", Telefone: "9989899" },
-                { Nome: "Pessoa4", Telefone: "9989899" }
+                { nome: "Pessoa1", telefone: "9989899" },
+                { nome: "Pessoa2", telefone: "9989899" },
+                { nome: "Pessoa3", telefone: "9989899" },
+                { nome: "Pessoa4", telefone: "9989899" }
             ];
 
             //NG-MODEL = PEGA DADOS DA VIEW E DEFINE NA VIEW
 
             //NG-CLICK = DISPARA UM EVENTO CLICK NA VIEW
-            $scope.adicionarPessoa = function() {
-                $scope.contatos.push({Nome: $scope.nome, Telefone: $scope.telefone});
+            $scope.adicionarPessoa = function(contato) {
+                $scope.contatos.push(angular.copy(contato));
+                delete $scope.contato;
             }
         });
     </script>
@@ -42,18 +44,18 @@
                     <th>Telefone Pessoa</th>
                 </tr>
                 <tr ng-repeat="contato in contatos">
-                    <td>{{contato.Nome}}</td>
-                    <td>{{contato.Telefone}}</td>
+                    <td>{{contato.nome}}</td>
+                    <td>{{contato.telefone}}</td>
                 </tr>
             </table>
         </div>
         <hr/>
         <div class="container form-group">
-            <input type="text" ng-model="nome" placeholder="Insira seu Nome" class="form-control"/><br/>
-            <input type="text" ng-model="telefone" placeholder="insira seu Telefone" class="form-control" /><br />
+            <input type="text" ng-model="pessoa.nome" placeholder="Insira seu Nome" class="form-control"/><br/>
+            <input type="text" ng-model="pessoa.telefone" placeholder="insira seu Telefone" class="form-control" /><br />
         </div>
         <div class="container form-group">
-            <button class="btn btn-primary btn-block" ng-click="adicionarPessoa()">Adicionar Pessoa</button>
+            <button class="btn btn-primary btn-block" ng-click="adicionarPessoa(pessoa)">Adicionar Pessoa</button>
         </div>
     </section>
 </body>
