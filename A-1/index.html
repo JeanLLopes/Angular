@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="hello">
+<head>
+    <title>Testando</title>
+    <link href="/Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="/Scripts/angular.js"></script>
+    <script>
+        var app = angular.module("hello", []);
+        app.controller("helloController", function ($scope) {
+            $scope.message = "Testando Algumas Coisas";
+        });
+
+
+    </script>
+</head>
+<body>
+    <section ng-controller="helloController">
+        {{message}}
+    </section>
+</body>
+</html>
