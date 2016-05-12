@@ -8,27 +8,28 @@
 
 
     <script src="/Scripts/angular.min.js"></script>
+    <script src="/Scripts/angular-locale-pt-br.js"></script>
     <script src="/Scripts/angular-messages.js"></script>
     <script>
         angular.module("ListaPessoas", ["ngMessages"]);
-        angular.module("ListaPessoas").controller("ListaPessoasController", function($scope) {
+        angular.module("ListaPessoas").controller("ListaPessoasController", function($scope,$filter) {
 
             //NG-BIND = RETORNA ITENS DA CONTROLLER PARA A VIEW
             $scope.app = "Lista de Pessoas Cadastradas";
 
             //NG-REPEAT = PERMITE NAVEGAR POR LISTA CRIADAS
             $scope.pessoas = [
-                { nome: "Pessoa1", telefone: "9989899", cor:"red" },
-                { nome: "Pessoa2", telefone: "9989899", cor: "red" },
-                { nome: "Pessoa3", telefone: "9989899", cor: "red" },
-                { nome: "Pessoa4", telefone: "9989899", cor: "red" }
+                { nome: $filter("uppercase")("Maria"), telefone: "1989899", dataNascimento: new Date(), cor:"red" },
+                { nome: $filter("uppercase")("Jose"), telefone: "2989899", dataNascimento: new Date(), cor: "red" },
+                { nome: $filter("uppercase")("Alfredo"), telefone: "3989899", dataNascimento: new Date(), cor: "red" },
+                { nome: $filter("uppercase")("Julia"), telefone: "4989899", dataNascimento: new Date(), cor: "red" }
             ];
 
             //CRIANDO UM ARRAY DE SEXOS
             $scope.sexos = [
-                { nome: "Masculino", codigo: "M", descricao: "Pessoa Sexo Masculino" },
-                { nome: "Feminino", codigo: "F", descricao: "Pessoa Sexo Feminino" },
-                { nome: "Outros", codigo: "O", descricao: "Pessoa Com Sexo Não Classificado" }
+                { nome: "Masculino", codigo: "M", descricao: "Pessoa Sexo Masculino", valorCad:5},
+                { nome: "Feminino", codigo: "F", descricao: "Pessoa Sexo Feminino", valorCad: 2 },
+                { nome: "Outros", codigo: "O", descricao: "Pessoa Com Sexo Não Classificado", valorCad: 10 }
             ];
 
             //NG-CLASS
@@ -74,6 +75,15 @@
                     return pessoa.selecionado;
                 });
             }
+
+
+            //PARA APLICAR OS FILTROS QUANDO O USUARIO CLICANO MENU SUPERIOR 
+            //ELE TAMEBM ALTERA A ORNAÇÃO DOS ITENS QUANDO O USUARIO CLICA MAIS DE UMA VEZ
+            $scope.OrdenarPor = function(campo) {
+                $scope.criterioOrdenacao = campo;
+                $scope.direcaoDaOrdenacao = !$scope.direcaoDaOrdenacao;
+            }
+
         });
     </script>
 </head>
@@ -84,20 +94,23 @@
         </header>
         <br />
         <div class="container">
+            <input type="text" ng-model="criterioDeBusca" placeholder="Busca Uma Pessoa" class="form-control" />
             <table class="table table-hover" ng-show="pessoas.length > 0">
                 <tr>
-                    <th>Selecionado</th>
-                    <th>Nome</th>
-                    <th>Telefone</th>
+                    <th></th>
+                    <th><a href="" ng-click="OrdenarPor('nome')">Nome</a></th>
+                    <th><a href="" ng-click="OrdenarPor('Telefone')">Telefone</a></th>
+                    <th>Data De Nascimento</th>
                     <th>Sexo</th>
                     <th></th>
                 </tr>
 
-                <tr ng-class="{selecionado: pessoa.selecionado}" ng-repeat="pessoa in pessoas">
+                <tr ng-class="{selecionado: pessoa.selecionado}" ng-repeat="pessoa in pessoas | filter:criterioDeBusca | orderBy: criterioOrdenacao:direcaoDaOrdenacao">
                     <td><input type="checkbox" ng-model="pessoa.selecionado" /></td>
                     <td>{{pessoa.nome}}</td>
                     <td>{{pessoa.telefone}}</td>
-                    <td>{{pessoa.sexo.nome}}</td>
+                    <td>{{pessoa.dataNascimento | date:'dd-MM-yyyy'}}</td>
+                    <td>{{pessoa.sexo.nome | lowercase}}</td>
                     <td><div style="width: 20px; height: 20px;" ng-style="{'background-color': pessoa.cor}"></div></td>
                 </tr>
             </table>
@@ -115,7 +128,7 @@
                             <option value="">Selecione um Sexo</option>
                         </select>-->
 
-                    <select class="form-control" ng-model="pessoa.sexo" ng-options="sexo.nome for sexo in sexos">
+                    <select class="form-control" ng-model="pessoa.sexo" ng-options="sexo.nome + '('+ (sexo.valorCad | currency) +')' for sexo in sexos | orderBy:'nome'">
                         <option value="">Selecione um Sexo</option>
                     </select>
 
@@ -126,7 +139,7 @@
                     
                     <div class="container form-group" ng-message="required">
                         <div class="alert alert-danger">
-                            <strong>Preencha todos os campos</strong>
+                            <strong>Preencha o campo Nome</strong>
                         </div>
                     </div>
                     <div class="container form-group" ng-message="minlength">
@@ -144,7 +157,7 @@
                     
                     <div class="container form-group" ng-message="required">
                         <div class="alert alert-danger">
-                            <strong>Preencha todos os campos</strong>
+                            <strong>Preencha o campo Telefone</strong>
                         </div>
                     </div>
                     <div class="container form-group" ng-message="pattern">
