@@ -1,14 +1,16 @@
 ﻿<html xmlns="http://www.w3.org/1999/xhtml" ng-app="ListaPessoas">
 <head>
     <title>Lista de Pessoas</title>
-    <link href="/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="/Content/style-page.css" rel="stylesheet"/>
+    <link href="/content/bootstrap.min.css" rel="stylesheet" />
+    <link href="/content/style-page.css" rel="stylesheet"/>
 
 
     <script src="/lib/angular.min.js"></script>
     <script src="/lib/angular-locale-pt-br.js"></script>
     <script src="/lib/angular-messages.js"></script>
-    <script src="/scripts/project-angular.js"></script>
+    
+    <script src="/scripts/app.js"></script>
+    <script src="/scripts/controllers/listaPessoasCtrl.js"></script>
 </head>
 <body ng-controller="ListaPessoasController" class="container">
     <section class="jumbotron text-center">
@@ -105,6 +107,6 @@
         PODEMOS PEGAR TAMBEM O RODAPE DA PEGINA
         DE OUTRO ARQUIVO
     -->
-    <div ng-include="'footer.html'"></div>
+    <div ng-include="'view/footer.html'"></div>
 </body>
 </html>

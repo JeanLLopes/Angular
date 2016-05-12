@@ -1,5 +1,4 @@
-﻿angular.module("ListaPessoas", ["ngMessages"]);
-angular.module("ListaPessoas").controller("ListaPessoasController", function ($scope, $filter) {
+﻿angular.module("ListaPessoas").controller("ListaPessoasController", function ($scope, $filter) {
 
     //NG-BIND = RETORNA ITENS DA CONTROLLER PARA A VIEW
     $scope.app = "Lista de Pessoas Cadastradas";
