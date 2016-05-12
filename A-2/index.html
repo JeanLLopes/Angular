@@ -1,5 +1,4 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" ng-app="ListaPessoas">
+﻿<html xmlns="http://www.w3.org/1999/xhtml" ng-app="ListaPessoas">
 <head>
     <title>Lista de Pessoas</title>
     <link href="/Content/bootstrap.min.css" rel="stylesheet" />
@@ -9,8 +8,9 @@
 
 
     <script src="/Scripts/angular.min.js"></script>
+    <script src="/Scripts/angular-messages.js"></script>
     <script>
-        angular.module("ListaPessoas", []);
+        angular.module("ListaPessoas", ["ngMessages"]);
         angular.module("ListaPessoas").controller("ListaPessoasController", function($scope) {
 
             //NG-BIND = RETORNA ITENS DA CONTROLLER PARA A VIEW
@@ -42,6 +42,8 @@
             $scope.adicionarPessoa = function(pessoa) {
                 $scope.pessoas.push(angular.copy(pessoa));
                 delete $scope.pessoa;
+
+                $scope.contatoForm.$setPristine();
             }
 
             $scope.apagarPessoa = function(pessoasDeletar) {
@@ -101,28 +103,67 @@
             </table>
         </div>
         <hr />
-        <div class="container form-group">
-            <input type="text" ng-model="pessoa.nome" placeholder="Insira seu Nome" class="form-control" /><br />
-            <input type="text" ng-model="pessoa.telefone" placeholder="insira seu Telefone" class="form-control" /><br />
+            <form name="contatoForm">
+                <div class="container form-group">
+                    <input type="text" ng-model="pessoa.nome" placeholder="Insira seu Nome" ng-required="true" name="nome" ng-minlength="10" class="form-control" /><br />
+                    <input type="text" ng-model="pessoa.telefone" placeholder="insira seu Telefone" name="telefone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/" class="form-control" /><br />
 
-            <!--<select class="form-control" ng-model="pessoa.sexo" ng-options="sexo.codigo as sexo.nome for sexo in sexos">
-                    <option value="">Selecione um Sexo</option>
-                </select>-->
-            <!--<select class="form-control" ng-model="pessoa.sexo" ng-options="sexo.nome group by sexo.descricao for sexo in sexos">
-                    <option value="">Selecione um Sexo</option>
-                </select>-->
+                    <!--<select class="form-control" ng-model="pessoa.sexo" ng-options="sexo.codigo as sexo.nome for sexo in sexos">
+                            <option value="">Selecione um Sexo</option>
+                        </select>-->
+                    <!--<select class="form-control" ng-model="pessoa.sexo" ng-options="sexo.nome group by sexo.descricao for sexo in sexos">
+                            <option value="">Selecione um Sexo</option>
+                        </select>-->
 
-            <select class="form-control" ng-model="pessoa.sexo" ng-options="sexo.nome for sexo in sexos">
-                <option value="">Selecione um Sexo</option>
-            </select>
-        </div>
-        <div class="container form-group">
-            <button class="btn btn-primary btn-block" ng-click="adicionarPessoa(pessoa)" ng-disabled="!pessoa.nome || !pessoa.telefone">Adicionar Pessoa</button>
-            <button class="btn btn-danger btn-block" ng-click="apagarPessoa(pessoas)" ng-if="PessoaSelecionada(pessoas)">Deletar Pessoas</button>
-            <!--<button class="btn btn-danger btn-block" ng-click="apagarPessoa(pessoas)" ng-hide="PessoaSelecionada(pessoas)">Deletar Pessoas</button>-->
-            <!--<button class="btn btn-danger btn-block" ng-click="apagarPessoa(pessoas)" ng-show="PessoaSelecionada(pessoas)">Deletar Pessoas</button>-->
-        </div>
-    </section>
+                    <select class="form-control" ng-model="pessoa.sexo" ng-options="sexo.nome for sexo in sexos">
+                        <option value="">Selecione um Sexo</option>
+                    </select>
+
+                </div>
+                <!-- ERROS DE CAMPO NOME -->
+                
+                <div ng-messages="contatoForm.nome.$error">
+                    
+                    <div class="container form-group" ng-message="required">
+                        <div class="alert alert-danger">
+                            <strong>Preencha todos os campos</strong>
+                        </div>
+                    </div>
+                    <div class="container form-group" ng-message="minlength">
+                        <div class="alert alert-danger">
+                            <strong>O campo Nome deve ter no minimo 10 caracteres</strong>
+                        </div>
+                    </div>
+
+                </div>
+                
+
+                
+                <!-- ERROS DE CAMPO TELEFONE -->
+                <div ng-messages="contatoForm.telefone.$error">
+                    
+                    <div class="container form-group" ng-message="required">
+                        <div class="alert alert-danger">
+                            <strong>Preencha todos os campos</strong>
+                        </div>
+                    </div>
+                    <div class="container form-group" ng-message="pattern">
+                        <div class="alert alert-danger">
+                            <strong>O campo telefone deve ter o seguinte padrão 9999-9999</strong>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <!-- CAMPOS DOS BOTOES -->
+                <div class="container form-group">
+                    <button class="btn btn-primary btn-block" ng-click="adicionarPessoa(pessoa)" ng-disabled="contatoForm.$invalid">Adicionar Pessoa</button>
+                    <button class="btn btn-danger btn-block" ng-click="apagarPessoa(pessoas)" ng-if="PessoaSelecionada(pessoas)">Deletar Pessoas</button>
+                    <!--<button class="btn btn-danger btn-block" ng-click="apagarPessoa(pessoas)" ng-hide="PessoaSelecionada(pessoas)">Deletar Pessoas</button>-->
+                    <!--<button class="btn btn-danger btn-block" ng-click="apagarPessoa(pessoas)" ng-show="PessoaSelecionada(pessoas)">Deletar Pessoas</button>-->
+                </div>
+            </form>
+</section>
 
     <!--
         PODEMOS PEGAR TAMBEM O RODAPE DA PEGINA
